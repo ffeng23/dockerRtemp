@@ -1,0 +1,9 @@
+reticulate::install_miniconda()
+
+reticulate::conda_install(packages = "python=3.7")
+
+install.packages("tensorflow")
+
+tensorflow::install_tensorflow(version="2.2")
+install.packages("keras")
+#keras::install_keras() #no need to do this.

@@ -1,0 +1,21 @@
+services:
+  app:
+    build: 
+      context: .
+    container_name: feng_rstudio
+    working_dir: /home/rstudio
+    command: /bin/bash
+    environment:
+        PASSWORD: rstudio
+        USER: feng
+        
+    volumes:
+      - ./:/home/rstudio/project1
+      
+    ports:
+      - 127.0.0.1:8787:8787
+      
+    stdin_open: true 
+    tty: true
+    
+      

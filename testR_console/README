@@ -1,0 +1,69 @@
+# docker project README
+
+In this docker project we try to test the building and running of R console with code and renv environment.
+
+This is different from rstudio docker since we try set up correctly the file permissions. In this case, we need to do at the running time to set up a new user based on the host user and set it up that way. 
+
+## explanation of files
+Again, we have Docker for building image and compose file for running (and building).
+
+-   Dockerfile
+
+In the docker file, we do the followings:
+    
+    + set up working directory
+
+    + install system-wise dependency
+    
+    + install R renv
+    
+    + copy R code files and renv autoloader.
+    
+    + restore renv local libraries.
+
+This way, the built image contains necessary code, renv libraries and dependencies and R.
+
+-  Compose file (docker-compose.yml)
+
+In the compose file, we do the following:
+
+    + define the build context (NOTE: this is used to build from the local)
+    
+    + define entrypoint (instead of command, because command will be override when we calling using docker compose exec r_renv4_1 [command]. here we want to make sure the entrypoint commands that is adding user/group and change permission to occur always.
+    Again, in the entrypoint, we running adding user and changing user uid and permission so that we won't have problem for the host to access it.
+    
+    + mount volume to the project folder
+    
+    + tty and stdin_open: not sure they are usefuly, but they are intended for make the run interactive and tty style. (see below)
+    
+    
+## other things
+
+- in the entrypoint command, we try to use variables to indicate the host user, user id and group id. They are defined in the environment file, ".env"
+
+- also in the yaml file, we can define environment variable using the "environment" attribute, which was commented out. This is different because these variables will be used in the container, but not in the compose file. Don't be confused with those used in the entrypoint for user id/name/group id.!!!!!
+
+
+## command to call to run containter
+
+docker compose up : this will run the container and show R is running, but we can not interact with it.
+
+docker compose up -d and then docker compose exec r_renv4_1 R : this will run R console interactively. but this will run as root..
+
+docker compose up -d and then docker compose exec r_renv4_1 sudo -u feng R : same as above, but this will run as user "feng"
+
+docker compose up -d and then docker compose exec r_renv4_1 sudo -u feng base: same as bove, but run bash interactively as user "feng"
+
+docker compose down -v # to remove all volume or network
+docker compose down -v # to remove all volume and network and image
+
+docker compose -f <xxx.yaml> up 
+docker compose -f <xxx.yaml> down
+
+## can not run use docker run ....
+
+## .env to set environment varialbe 
+
+in order to run the container apps with correct permission, we need to modify the .env to have the variables set correctly. This way we can have the right permission to work on files generated in the container app for the host user.
+
+Note: the correct the file permission for container is not an issue originally, since the container (R or bash) is doing root user. But in this project, in order to have the right permission for host, we add a new user (with identical uid as the host user) and chown modify the ownership and make it work.!!!!!!

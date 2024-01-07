@@ -1,0 +1,32 @@
+services:
+  rkeras:
+    build: 
+      context: .
+      dockerfile: Dockerfile.workRenvGPU
+    container_name: keras_ml_tf
+    working_dir: /home/rstudio/keras_r
+    #command: /bin/bash
+    environment:
+        PASSWORD: rstudio
+        USERID: 1000
+        
+    volumes:
+      - keras_r_vol:/home/rstudio/keras_r
+      
+    ports:
+      - 127.0.0.1:8787:8787
+      
+    #stdin_open: true 
+    #tty: true
+    
+    deploy:
+     resources:
+       reservations:
+         devices:
+           - driver: nvidia
+             count: 1
+             capabilities: [gpu]
+volumes:
+    keras_r_vol:
+    
+      

@@ -1,0 +1,26 @@
+R and Minicode Image --- not necessary now.
+
+Feng 12/18/2023
+
+This is the project that we try to build my own image with R docker and Miniconda, which can be used 
+by later project to use.
+
+We started with R code on Ubuntu and add Miniconda. We will also add mamba to it.
+
+See Docker file.
+
+
+
+
+NOTE:::::: At this moment, we don't need to this. Since we usually can do system R and manager packages and dependencies system-wise.
+
+Otherwise under current configuration, the rstudio is system-wise and if we have to do conda we have to "push" rstudio to under
+
+different conda env. So then there is no point to do rstudio and then conda and then rstudo under env again.
+
+
+We might need to do this later??? 
+
+or change the configure to have conda image first and then under conda to install R/Rstudio later.
+
+

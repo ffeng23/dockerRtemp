@@ -1,0 +1,22 @@
+In this folder, we run example project to test and learn how to use Keras R package to do machine learning.
+
+there is another project using keras R project for machine learning, ../m6APrediction.
+
+The reference for this project is from https://www.r-bloggers.com/2017/11/customer-analytics-using-deep-learning-with-keras-to-predict-customer-churn/
+ there is a local copy pdf file for the tutorial. Also the raw data were downloaded from Kaggle.
+ 
+ 
+ also in this above post, the author(s) gives credit to another post, https://datascienceplus.com/predict-customer-churn-logistic-regression-decision-tree-and-random-forest/
+ 
+ it is worth checking out.
+ https://datascienceplus.com/predict-customer-churn-logistic-regression-decision-tree-and-random-forest/
+ 
+ 
+ ## 1/6/2024
+ 
+ Start this project on docker 
+ see original folder at 
+ 
+ /home/feng/Feng/hg/docker_tutorial/Docker_RockerTF/
+ 
+for conda environment and also some documents related to machine learning.

@@ -1,0 +1,7 @@
+this folder we try to test use docker with rstudio for my own project
+
+1) docker
+2) os ubuntu or debian
+3) rstudio with R
+4) volume for project
+5) data

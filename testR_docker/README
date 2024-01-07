@@ -1,0 +1,75 @@
+# docker project README
+
+In this docker project we try to test the building and running of rstudio project with code and renv environment.
+
+This is different from "testR_console" project since we rstudio docker set up a "rstudio" user account in order to
+log in on access. In this case, we need to do at the build time to change the file owner to rstudio user, and then 
+at the running time to change the uid of rstudio user account in order for the host user to have access (read and write) to
+the docker generated files. The good thing is that we only need to do this since the rstudio "/init" will do at the 
+running time to change the owernship of all the /home/rstudio files for us. In the very end, we don't need to worried 
+about the file permissions. (but we need to make sure that we put the project files under /home/rstudio directory to
+avoid further actions for the correct permission).
+
+## explanation of files
+Again, we have Docker for building image and compose file for running (and building).
+
+-   Dockerfile
+
+In the docker file, we do the followings:
+    
+    + set up working directory
+
+    + install system-wise dependency
+    
+    + install R renv
+    
+    + copy R code files and renv autoloader.
+    
+    + change the ownership of the working directory to make sure the container user rstudio has correct permission.
+    
+    + restore renv local libraries.
+    
+    + lastly, this is very important. We change to make the rstudio to be opened at the project folder and also load the renv autoloader in order to config the rstudio to use the private/local libraries.
+
+This way, the built image contains necessary code, renv libraries and dependencies and R.
+
+-  Compose file (docker-compose.yml)
+
+In the compose file, we do the following:
+
+    + define the build context (NOTE: this is used to build from the local)
+    
+    + set up the environment variable : USERID=1005. This way, the USERID will be passed to
+    container system and it will use this one to modify the user uid and also change the owner of all the files in the /home/rstudio folder.
+    
+    + mount volume to the project folder
+    
+    
+    
+    + tty and stdin_open: not sure they are usefuly, but they are intended for make the run interactive and tty style. (see below)
+    
+    
+## other things
+
+- in the entrypoint command, we try to use variables to indicate the host user, user id and group id. They are defined in the environment file, ".env"   <----------------this doesn't occur to this  project. We could. But doesn't.
+
+- also in the yaml file, we can define environment variable using the "environment" attribute. USERID in this case is passed to the container. This is different because these variables will be used in the container, but not in the compose file. Don't be confused with those defined in .env file.
+
+
+## command to call to run containter
+
+docker compose up : this will run the container and start rstudio with loaded project.
+
+#uncomment the "command" attribute in yaml
+docker compose up -d and then docker compose exec r_rstudio_env4_1 R : this will run R console interactively. but this will run as root.
+
+docker compose up -d and then docker compose exec r_renv4_1 sudo -u feng R : same as above, but this will run as user "feng"
+
+docker compose up -d and then docker compose exec r_renv4_1 sudo -u feng base: same as bove, but run bash interactively as user "feng"
+
+
+## can not run use docker run ....
+
+
+
+Note: the correct the file permission for container is not an issue originally, since the container (R or bash) is doing root user. But in this project, in order to have the right permission for host, we add a new user (with identical uid as the host user) and chown modify the ownership and make it work.!!!!!!

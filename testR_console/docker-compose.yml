@@ -1,0 +1,44 @@
+
+services:
+  r_renv4_1:
+    build: .
+    #environment:
+    #    - USER= ruser
+    #    - uid= 1000
+    #    - gid= 1000
+    #command: >
+    entrypoint:
+        - /bin/bash 
+        - -c 
+        - |
+          echo 'modifying user id numberkkkkk.....'
+          echo '${USER_dock}.........'
+          echo '${DIR_TO_CHANGE}..........'
+          if [ ! $(getent group ${GID_dock}) ]; then
+             addgroup --gid ${GID_dock} ${USER_dock}_1
+          fi
+          
+          if [ ! $(getent passwd ruser) ]; then
+             adduser --uid ${UID_dock} --gid ${GID_dock} --gecos '' --disabled-password ruser
+          else
+             echo "modifying user id......."
+             usermod -u ${UID_dock} -g ${GID_dock} ruser
+          fi
+          echo 'change the owner ship of necessary files'
+          #please create project under the ruser home directory
+          #otherwise we need to change ownership of that directory too
+          chown -R ${UID_dock}:${GID_dock} /home/ruser/
+          echo 'Calling the services..........'
+          bash
+          #su - ${USER} R
+          #echo 'DONE'
+        
+        
+    #working_dir: /main
+    volumes:
+      - .:/home/ruser/project1
+    stdin_open: true 
+    tty: true
+
+volumes:
+    vol_test2:

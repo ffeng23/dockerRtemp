@@ -1,0 +1,7 @@
+calling command
+
+docker build -t "jupyterlab_1" .
+
+docker run --rm -w /project -it -v "$(pwd):/project" -p 8888:8888 jupyterlab_1
+
+ref: https://towardsdatascience.com/dockerizing-jupyter-projects-39aad547484a
