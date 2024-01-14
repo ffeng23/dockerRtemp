@@ -29,7 +29,7 @@ libraries.
 
   tags: latest-- this is the first one, doing the everything from scratch. (Dockerfile)
   
-      :incr.01--first incremental from latest one. (this is the latest one). (Dockerfile.incremental) 
+      :incr.01--first incremental from latest one. (this is the latest one). (Dockerfile_incremental) 
   
   project folder:    E14 hg/clinicalTrial
   
