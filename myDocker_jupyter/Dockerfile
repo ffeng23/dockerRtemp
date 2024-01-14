@@ -1,5 +1,6 @@
-FROM continuumio/miniconda3:4.12.0
-RUN conda install \
+FROM continuumio/miniconda3
+RUN conda config --set ssl_verify false \
+    && conda install \
     xarray \ 
     netCDF4 \ 
     bottleneck \
