@@ -1,5 +1,5 @@
 services:
-  rkeras:
+  rkeras_rcmd:
     build: 
       context: .
       dockerfile: Dockerfile.workingRcmd_TF

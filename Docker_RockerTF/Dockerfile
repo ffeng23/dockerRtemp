@@ -21,12 +21,14 @@ WORKDIR /home/rstudio/testR
 #RUN touch little_script.R
 #Run this in order to plot x11 figures
 RUN apt-get update && apt-get install -y --no-install-recommends libxt6 \
-    && apt-get install -y libz-dev \
-    && apt-get install -y libpng-dev libfontconfig1-dev \
-    && apt-get install -y libharfbuzz-dev libfribidi-dev \
-    && apt-get install -y libfreetype6-dev libtiff5-dev libjpeg-dev \
-    && apt-get install -y libxml2-dev \
-    && apt-get install -y python3-venv wget
+    libz-dev \
+    libpng-dev libfontconfig1-dev \
+    libharfbuzz-dev libfribidi-dev \
+    libfreetype6-dev libtiff5-dev libjpeg-dev \
+    libxml2-dev \
+    python3-venv wget \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 #RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda.sh && \
 #    /bin/bash ~/miniconda.sh -b -p /home/rstudio/miniconda3
@@ -69,8 +71,7 @@ COPY renv/settings.dcf renv/settings.dcf
 
 #RUN sudo  R -e "install.packages('renv')"
 
-RUN chown -R rstudio . \
-    && sudo -u rstudio R -e "renv::restore()"
+RUN chown -R rstudio . && sudo -u rstudio R -e "renv::restore()"
 
 #USER rstudio
 
@@ -88,8 +89,8 @@ RUN  sudo -u rstudio R -e "reticulate::conda_install(envname='r-reticulate',pack
 
 #RUN  sudo -u rstudio R -e "install.packages('tensorflow')"
 
-#RUN  sudo -u rstudio R -e "tensorflow::install_tensorflow(version='2.3')"
-#tensorflow::install_tensorflow(version='2.2', method="conda", envname="tf3.7",conda="auto")
+RUN  sudo -u rstudio R -e "tensorflow::install_tensorflow(version='2.3',method='conda',envname='r-reticulate',conda='auto')"
+#tensorflow::install_tensorflow(version='2.2', , envname="tf3.7",conda="auto")
 
 
 RUN sudo -u rstudio echo "setwd(\"/home/rstudio/testR/\")" > /home/rstudio/.Rprofile

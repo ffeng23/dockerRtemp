@@ -1,0 +1,10 @@
+##README
+
+NOTE::: this folder contains the docker file and docker compose files. But this one is not 
+functioning. Please check the project SComatic for real example!!!
+
+Docker here containers file for building from continuumio/miniconda and 
+file for building from ubuntu and download/install miniconda from scratch. 
+
+We chose to do continuumio one, because it is smaller and quicker!!!
+

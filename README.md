@@ -10,6 +10,12 @@
     
     We could call it without gpu enabled.
     
+    
+    This is the one on docker hub, 
+        ffeng23/ml_rstudio_v01
+            Description
+                A container for rstudio testing project with R4.1.3. Built upon rocker/ml for using tensorflow
+
 - testR_docker
     template for R docker (rstudio) with renv and correct file permissions.
     

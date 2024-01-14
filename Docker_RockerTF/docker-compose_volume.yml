@@ -1,5 +1,5 @@
 services:
-  rkeras:
+  rkeras_v:
     build: 
       context: .
       dockerfile: Dockerfile.workRenvGPU
