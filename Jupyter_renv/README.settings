@@ -1,0 +1,10 @@
+Settings
+
+--- E14
+jupyter_renv
+
+for testing jupyter renv
+
+jupyter-lab and R 4.3.2 python=3.11 (since the latest one 3.12 doesn't support jupyter yet.)
+
+to call : conda activate jupyter_renv

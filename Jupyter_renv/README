@@ -1,0 +1,25 @@
+# a small project to test how to incorporate renv in jupyter r project
+
+## it seems there are two hard issuses
+- with sub-folders in the project
+
+    solution: write special .Rprofile for each subfolder.
+    
+- how to keep track of R packages in renv.lock? Because renv doesn't check
+  .pyinb files for R packages. 
+
+    answer: R will check in each folder for .Rprofile. This way it will load through
+    activate.R code for renv local libraries.
+
+see explanations in the github reposition about this issue.
+
+
+## Note about base image
+jupyter/r-notebook
+
+this base image using conda for jupyter (/opt/conda). So R is also installed under conda.
+This means that some packages are installed under conda too and we need to add dependencies
+under conda (such as, pkg-config, pandoc, make, etc. ). For some special one, we might need
+to go to use R studio images, since they have system-wise R installation.
+
+!!!

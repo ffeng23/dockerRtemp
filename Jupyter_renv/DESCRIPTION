@@ -1,0 +1,5 @@
+Suggests:
+    IRkernel,
+    fortunes,
+    ggplot2
+    
