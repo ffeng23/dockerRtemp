@@ -13,6 +13,15 @@ The project fold is P52s Feng/hg/SComatic.
 R docker for doing ihc. It is not testing and not supposed to be fully functioning. Need to test more.
 the project folder is E14 feng/hg/IHC_proximity.
 
+    https://hub.docker.com/repository/docker/ffeng23/ihc_proximity_jupyter/general
+        
+        ffeng23/ihc_proximity_jupyter -- for jupyter environment with r-notebook 4.1.3
+    
+    https://hub.docker.com/repository/docker/ffeng23/ihc_proximity/general
+        
+        ffeng23/ihc_proximity -- for rstudio image R4.1.3
+
+
 - 3) ffeng23/ml_rstudio_v01
 
 This is more like a template for doing machine learning using R keras running on

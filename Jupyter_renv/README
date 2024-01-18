@@ -23,3 +23,32 @@ under conda (such as, pkg-config, pandoc, make, etc. ). For some special one, we
 to go to use R studio images, since they have system-wise R installation.
 
 !!!
+
+## Note about this work
+
+We did not push the image to the hub. It is not necessary for this testing project. We mainly provide the 
+docker and compose yaml here. 
+
+To run this, we need to bring up the container by 
+    
+    docker compose up
+    
+Then check for the docker host ip, by in a separate console and do
+    
+    docker ps 
+
+Then we will see the output like
+    
+    44d708d58190   jupyter_renv-jupyter_renv   "tini -g -- start-no…"   2 minutes ago   Up 2 minutes (healthy)   0.0.0.0:8888->8888/tcp, :::8888->8888/tcp   jupyter_renv-jupyter_renv-1
+
+The we know the ip is "0.0.0.0:8888". So we could bring up the app
+by 0.0.0.0:8888/lab?token=............
+with the token to be the one printed in the "docker compose up" output.
+
+## the jupyter lab interface also provide command line console that we can used
+to bring command line R interface to do renv operations and others too.
+
+## NEXT step: need to do multiple services or containers for both R studio and jupyter lab.
+and then selection one to use.
+
+    docker compose start [service...]
