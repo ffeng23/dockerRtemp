@@ -8,7 +8,9 @@ It have only the code and running environment. Base image is miniconda. User has
 local reference data, genome reference, PON etc.
 The project fold is P52s Feng/hg/SComatic.
 
-- 2) ffeng23/ihc_proximity
+    *** need to work more on this one.
+    
+- 2) and 3) ffeng23/ihc_proximity
 
 R docker for doing ihc. It is not testing and not supposed to be fully functioning. Need to test more.
 the project folder is E14 feng/hg/IHC_proximity.
@@ -21,14 +23,15 @@ the project folder is E14 feng/hg/IHC_proximity.
         
         ffeng23/ihc_proximity -- for rstudio image R4.1.3
 
+           
 
-- 3) ffeng23/ml_rstudio_v01
+- 4) ffeng23/ml_rstudio_v01
 
 This is more like a template for doing machine learning using R keras running on
 tensorflow. Base image is rocker/ml:4.1.3-cuda10.1. The project folder is
 P52s Feng/hg/docker_tutorial/docker_kera
 
-- 4) (**private**) clinicaltrial
+- 5) (**private**) clinicaltrial 6) (public) clinicaltrial_jupyter
  
 This is the one doing Rstudio used to do analysis on clinical trial. There is only code and environment, but
 no data. 
@@ -42,7 +45,21 @@ libraries.
   
   project folder:    E14 hg/clinicalTrial
   
-- 5) ffeng23/docker_r_readwritecompose2
-
+2nd one is jupyter r-notebook application. this one is public
+    E14 hg/clinicalTrial
+  
+- 7) ffeng23/docker_r_readwritecompose2
+This is to demo how to use the beginner level of R with read and write volume and commandline.
 This is the first one and for testing only. Check the folder on
 P52s hg/docker_tutorials/docker_r_readwritecompose2.
+
+
+- 8) ffeng23/igseq_r3
+this is docker images for IgSeq R3 for r studio application used to run R codes
+
+P52 hg/IgSeqR3 folder
+
+-9) ffeng23/umi_merge
+miniconda for run umi_merge. It is a separate folder. Part of code were copied to IgSeqR3 git hub code base.
+this one runs on env based on scc1 bu account.
+P52 hg/merge. 
