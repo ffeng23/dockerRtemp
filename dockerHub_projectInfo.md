@@ -62,7 +62,14 @@ P52 hg/IgSeqR3 folder
 - 9) ffeng23/umi_merge
 miniconda for run umi_merge. It is a separate folder. Part of code were copied to IgSeqR3 git hub code base.
 this one runs on env based on scc1 bu account.
-P52 hg/merge. 
+P52 hg/merge.
+
+- 10) ffeng23/localalign
+
+gcc 8 on debian 10 for localalign project.
+original folder 
+P52 hg/LocalAlign
+
 
 - 10) ffeng23/cloanalyst
 dotnet3.1 debian 10 linux for running cloanalyst. It loaded with running apps and sample data. 
