@@ -59,7 +59,12 @@ this is docker images for IgSeq R3 for r studio application used to run R codes
 
 P52 hg/IgSeqR3 folder
 
--9) ffeng23/umi_merge
+- 9) ffeng23/umi_merge
 miniconda for run umi_merge. It is a separate folder. Part of code were copied to IgSeqR3 git hub code base.
 this one runs on env based on scc1 bu account.
 P52 hg/merge. 
+
+- 10) ffeng23/cloanalyst
+dotnet3.1 debian 10 linux for running cloanalyst. It loaded with running apps and sample data. 
+the original folder is 
+P52 hg/package_cloanalyst/publish3.1_Jan262024
