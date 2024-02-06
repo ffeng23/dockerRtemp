@@ -71,7 +71,15 @@ original folder
 P52 hg/LocalAlign
 
 
-- 10) ffeng23/cloanalyst
+- 11) ffeng23/cloanalyst
 dotnet3.1 debian 10 linux for running cloanalyst. It loaded with running apps and sample data. 
 the original folder is 
 P52 hg/package_cloanalyst/publish3.1_Jan262024
+
+- 12) ffeng23/rpackage-dev
+R package developing environment with r 4.3.1 and documenting/pdf , mainly with perl, wget,
+qpdf, ghostscript. 
+the hardest part is for tinytex (needs perl, wget etc). otherwise it will fail.
+this is based on rocker/r-ver. 
+
+P52 hg/docker_tutorial/Rpackage_develop (and also hg/ELISAtools)

@@ -1,0 +1,18 @@
+services:
+    elisatools:
+        build: 
+            context: .
+            dockerfile: Dockerfile
+    
+        #image: elisatools
+    
+    
+        volumes:
+            - vol_elisatools:/App/package
+            #- ./:/tmp
+        stdin_open: true 
+        tty: true
+        
+volumes:
+    vol_elisatools:
+    
