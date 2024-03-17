@@ -63,3 +63,13 @@ P52 hg/IgSeqR3 folder
 miniconda for run umi_merge. It is a separate folder. Part of code were copied to IgSeqR3 git hub code base.
 this one runs on env based on scc1 bu account.
 P52 hg/merge. 
+
+-10) ffeng23/sns101seq
+
+this is the R studio project for doing data analysis of the SNS101 personalis sequencing data.!!!! 
+The project folder is on E14 sensei laptop, SNS101Seq.
+
+it has rocker with R 4.3.2. and this is the one start bind/volume separately for the whole folder and renv folders inside. Now the host and container are using different renv folders. We start having host and container separately and both works. Therefore, we can easily do incremental updateing of the docker image. This is because it seems BiocManager installed packages have some conflicting and can not install correctly. It fails because it can not update the pre-built packages. The error is caused by the permission, since we modify the container to be a user, the R user home .cache (even after disabling using renv cache) have packages linked to the system folders that were not corrected when switch to the user account. I wonder whether it will work if we don't swith to user (by USERID). But on the other hand, the container containing renv and R env were build and installed at the building time and somehow we don't have this problem!!! (weird, at that time we still try to do renv::restore on behalf of user). In addition, the host version of renv and packages were done with the cache pointing to conda environment packages which is owned by the user!!!
+
+Anyway, it worked!! 
+
