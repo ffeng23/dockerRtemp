@@ -17,19 +17,22 @@ services:
     # UID=1005 
     #
     environment:
-       NB_USER: "feng"
+       #NB_USER: "feng"
        NB_UID: 1000
        CHOWN_HOME: yes
+       CHOWN_HOME_OPT: '-R'
        
     user : root   
     ports:
        - 8888:8888
        
-    #working_dir: /main
+    #working_dir: /home/jovyan
     volumes:
-      - .:/home/feng/jupyter_renv
+      - .:/home/jovyan/jupyter_renv
+      - vol_jupyter_renv:/home/jovyan/jupyter_renv/renv
     stdin_open: true 
     tty: true
 
 volumes:
-    vol_test4:
+    #vol_test4:
+    vol_jupyter_renv:
