@@ -1,0 +1,28 @@
+# README
+
+##----------
+this one is not working for rstudio server.
+
+when installing through conda, it only works for rstudio desktop (IDE) but not server.
+
+!!! 
+
+need to work out other ways, say rocker/rstudio with conda miniconda.
+
+see 
++ 1) clearlinux_JupyterRstudio
+manually install rstudio-server with source and then install conda.
+this should work (still need to work out the details for invoke the server, but building and installation are working.
+
+on top of clearlinux!!! in order to reduce the size of images
+
++ 2) myDocker_rstudio/
+working rstudio, but no conda!!!
+
+
+##---------------
+This is a project used to test for doing rstudio with conda environment (miniconda3).
+This one is based on the SComatic (see that for starting). 
+Also we are testing and how we can test out and initiate rstudio.
+
+8/5/02024

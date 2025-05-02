@@ -2,9 +2,12 @@
 # 
 
 #https://cran.r-project.org/web/packages/keras/vignettes/
+# Disable GPU                                                                   
+#Sys.setenv("CUDA_VISIBLE_DEVICES" = -1)   
 
 
 library(keras)
+use_backend("tensorflow")
 mnist <- dataset_mnist()
 x_train <- mnist$train$x
 y_train <- mnist$train$y
@@ -40,11 +43,12 @@ model %>% compile(
   metrics = c('accuracy')
 )
 
-
+system.time(
 history <- model %>% fit(
   x_train, y_train, 
-  epochs = 30, batch_size = 128, 
+  epochs = 50, batch_size = 128, 
   validation_split = 0.2
+)
 )
 plot(history)
 

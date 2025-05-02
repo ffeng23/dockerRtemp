@@ -7,5 +7,6 @@ RUN conda config --set ssl_verify false \
     numpy \
     pandas \
     matplotlib \
-    jupyterlab
+    jupyterlab \
+    nodejs
 CMD ["jupyter-lab","--ip=0.0.0.0","--no-browser","--allow-root"]

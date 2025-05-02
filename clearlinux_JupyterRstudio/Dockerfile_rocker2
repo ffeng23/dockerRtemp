@@ -1,0 +1,47 @@
+FROM clearlinux:latest AS builder
+
+# Install a minimal versioned OS into /install_root, and bundled tools if any
+ENV CLEAR_VERSION=43250
+#RUN swupd os-install --no-progress --no-boot-update --no-scripts \
+#    --version ${CLEAR_VERSION} \
+#    --path /install_root \
+#    --statedir /swupd-state \
+#    --bundles os-core-update,which
+
+# Download and install conda into /usr/bin
+ENV MINICONDA_VERSION=py38_23.11.0-2
+RUN swupd bundle-add --no-progress which c-basic git java-basic devpkg-Linux-PAM unzip strace && \
+    curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh 
+#    sh /tmp/miniconda.sh -bfp /usr
+
+RUN curl -sL https://github.com/rstudio/rstudio/archive/refs/tags/v2024.12.1+563.tar.gz \
+-o /tmp/rstudio.tar.gz  
+RUN cd /tmp && mkdir rstudio && tar -zxvf ./rstudio.tar.gz -C rstudio --strip-components=1 
+
+RUN cd /tmp/rstudio/dependencies/linux && ./install-boost 
+RUN cd /tmp/rstudio/dependencies/common && ./install-soci && ./install-dictionaries  
+#RUN cd /tmp/rstudio/dependencies/common && ./install-node
+
+RUN cd /tmp/rstudio && mkdir build  
+RUN cd /tmp/rstudio/build #&& 
+#    cmake .. -DRSTUDIO_TARGET=Server -DCMAKE_BUILD_TYPE=Release
+
+
+USER 0
+
+# to run
+## docker run -it --rm vep2 su - user1 
+
+# to compile/build
+## docker build -f Dockerfile . -t vep2
+
+## for language server, this is the facility for providing IDE like environment
+#       for different languages. 
+# 1) first install necessary language server such as jupyterlab-lsp python-language-server
+#    Note: jupyterlab-lsp is necessary for all language servers,
+#           here we are interested in python language servers
+# 2) need to enable/activate the installed servers
+#       open jupyterlab and then => settings ==> setting editor
+#               => plugin manager 
+#           then enable or activate specific servers
+#

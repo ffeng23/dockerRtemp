@@ -1,0 +1,100 @@
+
+services:
+  jupyter_renv:
+    build: 
+       context: .
+       dockerfile: Dockerfile_clearlinux
+    
+    user: 0:0
+    environment:
+        - COMPOSE_BAKE= true
+    #    - uid= 1000
+    #    - gid= 1000
+    #command: bash
+    
+    #set the new user id 1005, so that the rstudio /init script 
+    #will change everyting in the user home directory
+    #so means we need to put our project directory in the user home directory
+    #here would also set up the .env to have USER id read it
+    # USERID: ${UID}
+    #.env
+    # UID=1005 
+    #
+    
+    entrypoint:
+        - /bin/bash 
+        - -c 
+        - |
+          echo 'modifying user id numberkkkkk.....'
+          echo '${USER_dock}.........'
+          echo '${DIR_TO_CHANGE}..........'
+          id
+          if [ ! $(getent group ${GID1}) ]; then
+             echo "adding group id......"
+             groupadd --gid ${GID1} ${USER_dock}_1  #note that we intentionally to append the user with _1 in case 
+                                                   #the user group already exists. be careful here.
+          fi
+          
+          if [ ! $(getent passwd $USER_dock) ]; then
+             useradd --uid ${UID1} --gid ${GID1} user1
+          else
+             echo "modifying user id......."
+             usermod -u ${UID1} -g ${GID1} $USER_dock
+          fi
+          echo 'change the owner ship of necessary files'
+          date > /home/${USER_dock}/Succeed.txt
+          echo 'start the chown job....' >> /home/${USER_dock}/Succeed.txt
+          #please create project under the ruser home directory
+            #otherwise we need to change ownership of that directory too
+          chown -R ${UID1}:${GID1} /home/${USER_dock}
+          
+          echo 'Calling the services..........'
+          echo 'Done with chown' >> /home/${USER_dock}/Succeed.txt
+          date >> /home/${USER_dock}/Succeed.txt
+          echo 'Done......'
+          
+          su user1 -c 'jupyter-lab --ip=0.0.0.0 --no-browser --port=8888'
+          
+          #echo 'running jupyter-lab....'
+          
+          #bash
+             
+    #command: ["jupyter-lab","--ip=0.0.0.0","--no-browser","--allow-root", "--port=8888"]
+    
+    ports:
+       - 8888:8888
+       
+    #working_dir: /home/jovyan
+    volumes:
+      - .:/home/${USER_dock}/
+      #- vol_jupyter_renv:/home/jovyan/jupyter_renv/renv
+    stdin_open: true 
+    tty: true
+    
+    
+
+volumes:
+    #vol_test4:
+    vol_jupyter_renv:
+
+    
+
+## to run the build using
+#  dockcompose compose build
+
+#  to run it
+#  1) modify the .env file if necessary
+#  2) docker compose up -d # run in background
+#  3) docker compose exec vep_2 bash # run bash as root
+#  4) docker compose exec vep_2 su - user1 #run as user1
+#  5) how to invoke conda env SComatic???? (need to work out)
+# ---- 
+#  6) if this is the jupyter container need to run jupyter-lab with --ip="0.0.0.0"
+#       which allows for listening to the ip in order to access from web UI from 
+#          host into container
+#  7) also need to open up the port for host to access container's port from outside
+#      see it in the above "ports:\n\t 8888:8888
+
+## to start jupyter lab 
+#       jupyter-lab --ip="0.0.0.0" --no-browser
+    

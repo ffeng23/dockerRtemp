@@ -1,0 +1,78 @@
+FROM clearlinux:latest AS builder
+
+# Install a minimal versioned OS into /install_root, and bundled tools if any
+ENV CLEAR_VERSION=43250
+RUN swupd os-install --no-progress --no-boot-update --no-scripts \
+    --version ${CLEAR_VERSION} \
+    --path /install_root \
+    --statedir /swupd-state \
+    --bundles os-core-update
+
+# Download and install conda into /usr/bin
+ENV MINICONDA_VERSION=py38_23.11.0-2
+RUN curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
+    sh /tmp/miniconda.sh -bfp /usr
+    
+RUN conda create -qy -p /usr/local \
+    -c conda-forge \
+    -c bioconda \
+    -c defaults \
+    python=3.13 \
+    jupyterlab \
+    nodejs \
+    xarray \ 
+    netCDF4 \ 
+    bottleneck \
+    numpy \
+    pandas \
+    matplotlib \
+    pip \
+    && conda clean --all --yes
+
+
+# Deploy the minimal OS and tools into a clean target layer
+FROM scratch
+
+LABEL maintainer="Feng Feng <ffeng23@gmail.com>"
+
+COPY --from=builder /install_root /
+COPY --from=builder /usr/local /usr/local
+#COPY data /opt/data
+#COPY *.pl /opt/
+WORKDIR /opt
+
+#Adding users
+ARG UID=1000
+ARG GID=1000
+ARG USER1=user1
+
+#create a new user. this is necessary to make the file generated in docker to 
+# have the permission (read/write) to the host
+RUN groupadd --gid $GID $USER1 && useradd --uid $UID --gid $GID $USER1
+
+USER user1
+WORKDIR /home/${USER1}
+#note this one is the project folder, holding snakemake files
+
+#make three folders, first for project data, second for reference
+
+USER 0
+
+CMD ["jupyter-lab","--ip=0.0.0.0","--no-browser","--allow-root"]
+
+# to run
+## docker run -it --rm jupyter_dock su - user1
+## docker run -it --rm jupyter_dock bash
+# to compile/build
+## docker build -f Dockerfile_jupyterlab . -t jupyter_dock
+
+## for language server, this is the facility for providing IDE like environment
+#       for different languages. 
+# 1) first install necessary language server such as jupyterlab-lsp python-language-server
+#    Note: jupyterlab-lsp is necessary for all language servers,
+#           here we are interested in python language servers
+# 2) need to enable/activate the installed servers
+#       open jupyterlab and then => settings ==> setting editor
+#               => plugin manager 
+#           then enable or activate specific servers
+#

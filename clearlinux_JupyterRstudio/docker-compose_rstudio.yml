@@ -1,0 +1,109 @@
+services:
+  vep_2:
+    build: 
+        context: .
+        dockerfile: Dockerfile_rocker3
+    
+    user: 0:0
+    #environment:
+    #    USER_d: user1
+    #    uid1: 1000
+    #    gid1: 1000
+    #    DIR_TO_CHANGE: /home/user1
+    #command: bash
+    
+    #set the new user id 1005, so that the rstudio /init script 
+    #will change everyting in the user home directory
+    #so means we need to put our project directory in the user home directory
+    #here would also set up the .env to have USER id read it
+    # USERID: ${UID}
+    #.env
+    # UID=1005 
+    #
+    #environment:
+    #   USERID: 1000
+    #   PASSWORD: rstudio1
+    
+    ports:
+       - 8888:8888
+       
+    entrypoint:
+        - /bin/bash 
+        - -c 
+        - |
+          echo 'modifying user id numberkkkkk.....'
+          echo '${USER_dock}.........'
+          echo '${DIR_TO_CHANGE}..........'
+          id
+          if [ ! $(getent group ${GID1}) ]; then
+             echo "adding group id......"
+             groupadd --gid ${GID1} ${USER_dock}_1  #note that we intentionally to append the user with _1 in case 
+                                                   #the user group already exists. be careful here.
+          fi
+          
+          if [ ! $(getent passwd $USER_dock) ]; then
+             useradd --uid ${UID1} --gid ${GID1} user1
+          else
+             echo "modifying user id......."
+             usermod -u ${UID1} -g ${GID1} $USER_dock
+          fi
+          echo 'change the owner ship of necessary files'
+          date > /home/${USER_dock}/Succeed.txt
+          echo 'start the chown job....' >> /home/${USER_dock}/Succeed.txt
+          #please create project under the ruser home directory
+            #otherwise we need to change ownership of that directory too
+          chown -R ${UID1}:${GID1} /home/${USER_dock}
+          
+          echo 'Calling the services..........'
+          echo 'Done with chown' >> /home/${USER_dock}/Succeed.txt
+          date >> /home/${USER_dock}/Succeed.txt
+          echo 'Done......'
+          bash
+             
+    #working_dir: /main
+    #NOTES about directory mapping: IMPORTANT. we need to map two folders.
+    #   + the software/app folder related to the cnvkit and docker files. The directory and mapping should be fixed
+    #       change this only when we modify the docker ro cnvkit ----- container related
+    #   + this is part mapping to the real project with data on the host machine. Need to customize.
+    #       make sure it contains everything to run
+    #   + we added one more, mainly because the data is separated (because they are huge) from the project. 
+    #       Of course we can always do this to have a separated folder/mapping for something . need to modify/custermize
+    
+    volumes: ##need to modify to point to the actual folder on the system.
+        #this is the one contains code and information about dockers and tools
+      - .:/home/${USER_dock}/vep
+      #contains the code of snake make and other things. and also results
+      # VEP and VEP cache data
+      # To-do: make sure the docker can also host the VEP and snakemake
+      
+      ###
+      - data_vol:/home/${USER_dock}/seq_data
+      #the data file contains the reference data and also input gene sequencing data
+      # need to modify 
+      
+      - ref_vol:/home/${USER_dock}/ref_seq
+    stdin_open: true 
+    tty: true
+
+volumes:
+    data_vol:
+    ref_vol:
+    
+## to run the build using
+#  dockcompose compose build
+
+#  to run it
+#  1) modify the .env file if necessary
+#  2) docker compose up -d # run in background
+#  3) docker compose exec vep_2 bash # run bash as root
+#  4) docker compose exec vep_2 su - user1 #run as user1
+#  5) how to invoke conda env SComatic???? (need to work out)
+# ---- 
+#  6) if this is the jupyter container need to run jupyter-lab with --ip="0.0.0.0"
+#       which allows for listening to the ip in order to access from web UI from 
+#          host into container
+#  7) also need to open up the port for host to access container's port from outside
+#      see it in the above "ports:\n\t 8888:8888
+
+## to start jupyter lab 
+#       jupyter-lab --ip="0.0.0.0" --no-browser

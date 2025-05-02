@@ -1,0 +1,86 @@
+FROM continuumio/miniconda3:23.10.0-1
+
+#here we define the newly created user
+# this is necessary since it will be used by the docker compse 
+# at run time to solve the file permission issues.
+# UID/GID/ruser are all arbitrary. 
+# we call it ruser to be a general name for easily used purpose
+# UID and GID will be modified at the run time (in yaml compose file)
+# depending on who is calling it.
+ARG UID=2000
+ARG GID=2000
+ARG USER1=ruser
+
+#create a new user. this is necessary to make the file generated in docker to 
+# have the permission (read/write) to the host
+RUN addgroup --gid $GID $USER1 
+RUN adduser --uid $UID --gid $GID --gecos '' --disabled-password $USER1
+
+#Start doing conda 
+RUN apt-get update \
+    && apt-get install -y build-essential \
+    && apt-get install -y wget sudo \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+
+#create a folder in container and entering it.
+#something it is not working well at the root directory.
+WORKDIR /home/$USER1/scomatic
+
+# Install miniconda
+# ref : https://fabiorosado.dev/blog/install-conda-in-docker/
+ENV CONDA_DIR /opt/conda
+
+
+# Put conda in path so we can use conda activate
+ENV PATH=$CONDA_DIR/bin:$PATH 
+
+
+#COPY environment.yml environment.yml
+#COPY r_requirements_install*.R ./
+RUN conda init
+#RUN conda env create -f environment.yml -v
+RUN conda create -n SComatic -c conda-forge mamba python=3.9 r-base rstudio -v -y
+
+SHELL ["/bin/bash", "-c"]
+
+#RUN 
+RUN source ${CONDA_DIR}/etc/profile.d/conda.sh \
+    && conda activate SComatic && sudo rstudio-server start
+    
+    #&& mamba install -c conda-forge r-base=4.1.3 r::rstudio -y --quiet
+    
+    
+    #&& Rscript r_requirements_install.v3_6.R
+
+#copy files and structures: We copy everthing one by one to avoid too huge the image
+
+#COPY * ./ #this will copy evertyihg, but too huge
+USER ${USER1}
+COPY README* ./
+
+#change back to root, otherwise we will have trouble to 
+# do things like change file owners (in yaml at the run time)
+USER root
+
+
+
+#COPY renv/settings.dcf renv/settings.dcf
+# Note for above, we don't have renv/settings.json somehow (?),
+# it is not necessary!!! we could just need .Rprofile and activate.R and renv.lock
+#
+
+#change owner ship to rstudio, RECURSIVELY with -R
+# and then restor the renv library as the user "rstudio"
+#RUN chown -R $USER1 ./
+#RUN chown rstudio /home/renv.lock
+
+
+#this is for rstudio. so we need to change the ownership
+#RUN chown rstudio /app/KerasR_test
+
+#add current directory to show in the print.
+#RUN echo "print('hi, every-body!$(pwd)')" >> little_script.R
+#RUN echo "created an R file. now running.....!!\n"
+#CMD ["Rscript", "readwrite.R"]
