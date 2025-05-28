@@ -1,5 +1,7 @@
 FROM lscr.io/linuxserver/code-server:latest
 
+#note this is for the second time after we finish the first time run of docker and set up the
+# container side things, extendsion renv, venv uv
 
 ARG NB_USER=1000
 
@@ -27,21 +29,23 @@ RUN  quarto install tinytex
 # comment the below lines, if this is the first time run.
 # uncomment them, if this is after the first run.
 #########################
-#COPY workspace/renv.lock renv.lock
-#RUN  mkdir -p renv
+COPY workspace/renv.lock renv.lock
+RUN  mkdir -p renv
 
-#COPY workspace/.Rprofile .Rprofile
-#COPY workspace/renv/activate.R renv/activate.R
-#COPY workspace/renv/settings.json renv/settings.json
+COPY workspace/.Rprofile .Rprofile
+COPY workspace/renv/activate.R renv/activate.R #no this, since it in renv that is a named valume;
+COPY workspace/renv/settings.json renv/settings.json #no this, since it in renv that is a named valume;
+
 #COPY renv/settings.dcf renv/settings.dcf
 
 #########USER ${NB_USER}
 #first time
-RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https://cloud.r-project.org'))"
+#RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https://cloud.r-project.org'))"
 
 COPY workspace/*.R ./
+
 #USER ${NB_USER}
-RUN R -e "renv::init(bare=TRUE)"
+#RUN R -e "renv::init(bare=TRUE)"
 #note, this renv::init(bare=TRUE) is to initialize ON THE CONTAINER the "renv" folder and generate
 #  .Rprofile. so far this is enough, since we need to map the renv in the compose file. without this
 # we have to also modify the compose file to distinguish first time from afterwards. (NOT nice!!!)
@@ -58,8 +62,8 @@ RUN R -e "renv::init(bare=TRUE)"
 
 
 #after first time
-#RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https://cloud.r-project.org'))" &&
-#    R -e "renv::settings\$use.cache(FALSE);renv::restore()"
+RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https://cloud.r-project.org'))" && \
+    R -e "renv::settings\$use.cache(FALSE);renv::restore()"
 
 ######################
 ##   END of section
@@ -90,17 +94,17 @@ RUN R -e "renv::init(bare=TRUE)"
 # we also need to generate uv.lock (?) during the first time. "source .venv/bin/activate (?)
 ############################
 
-#COPY workspace/pyproject.toml ./
-#COPY workspace/uv.lock ./
+COPY workspace/pyproject.toml ./
+COPY workspace/uv.lock ./
 
 #--> choose this one if this is after first time (uv sync)
-#RUN curl -LsSf https://astral.sh/uv/install.sh | sh &&
-#  . $HOME/.local/bin/env && uv venv && uv sync
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
+  . $HOME/.local/bin/env && uv venv && uv sync
 
 
 #--->choose this one if this is the first time (no uv sync)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-  . $HOME/.local/bin/env && uv venv
+#RUN curl -LsSf https://astral.sh/uv/install.sh | sh &&
+#  . $HOME/.local/bin/env && uv venv
 
 #thins to do for the first time for uv venv for the first time after the container is running:
 #

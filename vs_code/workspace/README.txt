@@ -22,7 +22,8 @@ It comes in with other 4 extensions,
 
   - Jupyter slide Show
 
-+ pdf-viewer if we want to diplay pdf files
++ pdf-viewer if we want to diplay pdf files (vscode-pdf tomoki1207)
+
 
 Again, these extensions need to be installed in the VS code server interface (, instead 
 if we run vs code, we could do commandline at the docker building time with command like
@@ -48,7 +49,7 @@ if we run vs code, we could do commandline at the docker building time with comm
 
 + ctrl+shift p -> quarto: Preview
 
-+ ctrl_shift p -> quarto: Render Document and then follow the prompt 
++ ctrl_shift p -> quarto: Render Document, and then follow the prompt
 
 
 ## R 
@@ -69,7 +70,7 @@ and add R extension (REditorSupport, see above)
 
 ## Python
 
-add the tag "jupyter: python3" 
+add the tag "jupyter: python3" in quarto file
 
 we need to jupyter with engine python3. 
 so we need to install at the systme jupyter-notebook 

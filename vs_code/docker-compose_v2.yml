@@ -3,7 +3,7 @@ services:
     #image: lscr.io/linuxserver/code-server:latest
     build: 
        context: .
-       dockerfile: Dockerfile
+       dockerfile: Dockerfile_v2
 
     container_name: code-server
     environment:
@@ -20,7 +20,7 @@ services:
       # (copying over the host side renv)
       #
       - .:/config
-      #- vscode_vol:/config/workspace/renv
+      - vscode_vol:/config/workspace/renv
       - vscode_vol_uv:/config/.local/bin
       - vscode_vol_venv:/config/workspace/.venv
     ports:
