@@ -1,0 +1,31 @@
+services:
+  code-server:
+    #image: lscr.io/linuxserver/code-server:latest
+    build: 
+       context: .
+       dockerfile: Dockerfile
+
+    container_name: code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - PASSWORD=password #optional
+      - SUDO_PASSWORD=password #optional
+      - DEFAULT_WORKSPACE=/config/workspace #optional
+    volumes:
+      - .:/config
+      - vscode_vol:/config/workspace/renv
+      - vscode_vol_uv:/config/.local/bin
+      - vscode_vol_venv:/config/workspace/.venv
+    ports:
+      - 8443:8443
+    restart: unless-stopped 
+  
+volumes:
+  vscode_vol:
+  
+  vscode_vol_uv:
+
+  vscode_vol_venv: 
+  
