@@ -94,6 +94,7 @@ So the end result is that the file permission will never match the host permissi
 the files on the host (might through root privilege). So we have to go throught vs code and do version control through
 vs on the container. (git see below)
 
+-----------------
 ## version control
 
 due to file permissio issues (see above), we have to do through vs-code interface. Good or bad. don't know.
@@ -102,6 +103,8 @@ will figure this out later.
 
 (need to be careful about this with dockerfile and docker compose at the root of the folder!!!!)
 
+
+-----------------
 ## structure of the folder and vs code project.
 
 so far, it is still one vs code server for each different project. don't mix the projects.
@@ -127,10 +130,12 @@ Design:
 
 ## uv, the new python managing utility
 
-a 
+very fast, very good to use.
+
+no need to prepare the 
 
 
-## python and quarto running python.
+## python and quarto running python. select Interpretor
 
 commands:
 
@@ -143,3 +148,44 @@ commands:
 + select code lines and then -> shift+Enter to run
 
 + right up corner "1>" the triangle sign to run the python file.
+
+
+## Design issues about Renv and venv and project
+
+It is a bit complicated!!! 
+
+###  uv and venv
+
+First thing about the complication is that Renv and venv are different in design.
+
+renv is slow, but venv seems quick. So that we can prepare renv at the docker time, but venv at the run time (after launching the vs code. and 
+through vs code environment. 
+
+second thing.It seems that when I tried to use venv, if prepare venv environment on the container, and then mapped as named volume for .venv folder, I will
+be complained for adding (by uv add matplot, eg) packages as "hardlink to file, reduced performance" warning.it is likely because of "different file system"??. 
+
+Anyway, a workable strategy is to install uv (for the first time), and then create virtual environment by uv within vs code environment. 
+Later on, we only need to keep track the pyproject.toml and uv.lock by git and only update (sync) the environment, but don't update the docker for venv point of view.
+
+
+### renv 
+
+Again, for renv, we would do the same thing as we do for uv. But for now we are doing this differently, we prepare the renv libraries on docker container,
+and then map the named volume of renv of container. After that, we will prepare the incremental docker containers later as necessary. we also keep track of
+renv.lock among others for project environment. Of course, we need to do the first time to set up things. 
+
+### Project
+
+for project files, we will run git to keep track inside vs code, this way, we wouldn't have permission issues. 
+
+since the project and vs-code IDE are separated, we don't have to match the user id in the docker to linux host system
+user ids (?). we only need to make sure the two ids in Dockerfile and docker-compose file match.
+
+!!!(need to confirm).
+
+---------------------
+## To-do later
+
+1) need to split the docker into R and Python modules.
+
+2)

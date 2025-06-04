@@ -33,8 +33,8 @@ COPY workspace/renv.lock renv.lock
 RUN  mkdir -p renv
 
 COPY workspace/.Rprofile .Rprofile
-COPY workspace/renv/activate.R renv/activate.R #no this, since it in renv that is a named valume;
-COPY workspace/renv/settings.json renv/settings.json #no this, since it in renv that is a named valume;
+COPY workspace/renv/settings.json ./renv/settings.json 
+COPY workspace/renv/activate.R ./renv/activate.R 
 
 #COPY renv/settings.dcf renv/settings.dcf
 
@@ -94,12 +94,14 @@ RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https:
 # we also need to generate uv.lock (?) during the first time. "source .venv/bin/activate (?)
 ############################
 
-COPY workspace/pyproject.toml ./
-COPY workspace/uv.lock ./
+#COPY workspace/pyproject.toml ./
+#COPY workspace/uv.lock ./
+
+#here we assuem we will obtain the updated uv.lock and tomol from git inside vs-code
 
 #--> choose this one if this is after first time (uv sync)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-  . $HOME/.local/bin/env && uv venv && uv sync
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&& 
+#  . $HOME/.local/bin/env && uv venv && uv sync
 
 
 #--->choose this one if this is the first time (no uv sync)

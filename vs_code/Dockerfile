@@ -39,9 +39,11 @@ RUN  quarto install tinytex
 #first time
 RUN R -e "install.packages(c('renv', 'languageserver'), repos = c(CRAN = 'https://cloud.r-project.org'))"
 
-COPY workspace/*.R ./
+#COPY workspace/*.R ./
 #USER ${NB_USER}
-RUN R -e "renv::init(bare=TRUE)"
+
+#RUN R -e "renv::init(bare=TRUE)"
+
 #note, this renv::init(bare=TRUE) is to initialize ON THE CONTAINER the "renv" folder and generate
 #  .Rprofile. so far this is enough, since we need to map the renv in the compose file. without this
 # we have to also modify the compose file to distinguish first time from afterwards. (NOT nice!!!)
@@ -99,8 +101,8 @@ RUN R -e "renv::init(bare=TRUE)"
 
 
 #--->choose this one if this is the first time (no uv sync)
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
-  . $HOME/.local/bin/env && uv venv
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&& 
+#  . $HOME/.local/bin/env && uv venv
 
 #thins to do for the first time for uv venv for the first time after the container is running:
 #
@@ -108,6 +110,12 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
 #         uv init #generate pyproject.toml and structure and others
 #         uv add jupyter # to add the jupyter to the environment and also generate the lockfile, vu.lock
 #
+#updated 6/1/2025, we decided not to any preparations for venv, since
+#     1) it is fast to recreate
+#     2) it seems vs-code has its own file system (ms?), it we prepare here at the system wise
+#     and map later, we will has issues(warning) and reduce the performance.
+#     so we will each time prepare only uv.lock or project.toml(?) by git and recreate venv in vs-code
+# 
 #######################
 
 ###########################

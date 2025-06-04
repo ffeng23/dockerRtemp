@@ -1,11 +1,11 @@
 services:
-  code-server:
+  code-server-python:
     #image: lscr.io/linuxserver/code-server:latest
     build: 
        context: .
-       dockerfile: Dockerfile
+       dockerfile: Dockerfile_python
 
-    container_name: code-server
+    container_name: code-server-python
     environment:
       - PUID=1000
       - PGID=1000
@@ -28,7 +28,7 @@ services:
     restart: unless-stopped 
   
 volumes:
-  vscode_vol:
+  #vscode_vol:
   
   vscode_vol_uv:
 

@@ -1,0 +1,81 @@
+FROM lscr.io/linuxserver/code-server:latest
+
+#this one is for vs-code to developing python (no R environment)!!!!
+# only prepare uv alone
+#
+
+ARG NB_USER=1000
+
+#now prepare the R and renv
+WORKDIR /config/workspace
+
+ADD https://github.com/quarto-dev/quarto-cli/releases/download/v1.7.31/quarto-1.7.31-linux-amd64.deb ./quarto.deb
+
+
+RUN apt-get update && apt-get install -qy --no-install-recommends cmake \
+pandoc gcc \
+#make libpng-dev libpng-tools zlib1g-dev 
+python3 python3-pip jupyter-notebook python3-yaml && \
+#pkg-config automake autoconf g++ libxml2-dev && 
+apt-get clean
+
+RUN dpkg -i quarto.deb
+#RUN apt-get install -qy python3-jupyter-server python3-jupyterlab-server
+
+RUN  quarto install tinytex
+
+
+#USER root
+
+#RUN chown -R ${NB_USER} .
+
+
+
+#RUN /app/code-server/lib/vscode/bin/remote-cli/code-server --install-extension 'reditorsupport.r'
+
+
+#RUN echo "renv::settings\$use.cache(FALSE)" > /home/${NB_USER}/.Rprofile
+#install uv for python dependencies
+
+
+#######################
+## this below section is for update the python venv after the first time (similar to R renv)
+#comment the below lines, if this is the first time run.
+# uncomment them, if this is after the first run.
+#
+#ALSO NOTE: first time we need to run uv init to generate pyproject.toml and other files
+# we also need to generate uv.lock (?) during the first time. "source .venv/bin/activate (?)
+############################
+
+#COPY workspace/pyproject.toml ./
+#COPY workspace/uv.lock ./
+
+#here we assuem we will obtain the updated uv.lock and tomol from git inside vs-code
+
+#--> choose this one if this is after first time (uv sync)
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&& 
+#  . $HOME/.local/bin/env && uv venv && uv sync
+
+
+#--->choose this one if this is the first time (no uv sync)
+#RUN curl -LsSf https://astral.sh/uv/install.sh | sh &&
+#  . $HOME/.local/bin/env && uv venv
+
+#thins to do for the first time for uv venv for the first time after the container is running:
+#
+# in terminal run : . $HOME/.local/bin/env #to activate the uv path
+#         uv init #generate pyproject.toml and structure and others
+#         uv add jupyter # to add the jupyter to the environment and also generate the lockfile, vu.lock
+#
+#######################
+
+###########################
+## END OF SECTION
+##########################
+
+
+#RUN ls -la .. && pwd && ls -la . && id && ls -la ../.local/bin && 
+#    ../.local/bin/uv --version 
+
+RUN chown -R ${NB_USER} .
+
