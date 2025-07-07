@@ -64,9 +64,11 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&&
 #thins to do for the first time for uv venv for the first time after the container is running:
 #
 # in terminal run : . $HOME/.local/bin/env #to activate the uv path
-#         uv init #generate pyproject.toml and structure and others
+#         uv init #start the project and generate pyproject.toml and structure and others
+#	  uv venv # create the virtual environment
+#	  . .venv/bin/activate # activate the virtual envirotnmen for project
 #         uv add jupyter # to add the jupyter to the environment and also generate the lockfile, vu.lock
-#
+#	  uv deactivate # deactivate the environment.
 #######################
 
 ###########################
