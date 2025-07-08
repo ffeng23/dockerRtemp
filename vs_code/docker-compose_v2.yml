@@ -1,3 +1,7 @@
+---Currently, we don't use this one for testing.
+
+-- v2 files are only used for R ides (docker-compose_R_v2.yml and Dockerfile_R_v2)
+
 services:
   code-server:
     #image: lscr.io/linuxserver/code-server:latest

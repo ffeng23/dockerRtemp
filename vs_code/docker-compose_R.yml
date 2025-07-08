@@ -1,15 +1,11 @@
 services:
-  code-server:
+  code-server-r:
     #image: lscr.io/linuxserver/code-server:latest
     build: 
        context: .
-       dockerfile: Dockerfile
+       dockerfile: Dockerfile_R
 
-
-    privileged: true
-
-    container_name: code-server
-    user: root
+    container_name: code-server-r
     environment:
       - PUID=1001
       - PGID=1001
@@ -17,28 +13,6 @@ services:
       - PASSWORD=password #optional
       - SUDO_PASSWORD=password #optional
       - DEFAULT_WORKSPACE=/config/workspace #optional
-
-
-    entrypoint:
-        - /bin/bash 
-        - -c 
-        - |
-          id
-          ulimit -n 165536
-          service docker restart
-          service docker status
-          docker info
-          ls -la /var/run/
-          chmod a+r /var/run/docker.sock
-          chown abc:docker -R /config/.docker
-          chmod -R g+rw /config/.docker
-          echo 'Calling the services..........'
-          usermod -p $(openssl passwd -1 password2) abc
-          #usermod -aG sudo abc
-          #su abc -s /bin/bash -c "/app/code-server/bin/code-server --bind-addr 0.0.0.0:8443" 
-          sudo -u abc /app/code-server/bin/code-server --bind-addr 0.0.0.0:8443 --auth none
-          #bash
-
     volumes:
       #be really careful, we need to comment out the second line for mapping renv when we first run this!!
       # the first time, we acctually set up everything
@@ -50,11 +24,9 @@ services:
       - vscode_vol_uv:/config/.local/bin
       #- vscode_vol_venv:/config/workspace/.venv
     ports:
-      - 8443:8443
+      - 8442:8443
     restart: unless-stopped 
-
-    tty: true
-    stdin_open: true
+  
 volumes:
   vscode_vol:
   

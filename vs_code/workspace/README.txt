@@ -158,14 +158,29 @@ It is a bit complicated!!!
 
 First thing about the complication is that Renv and venv are different in design.
 
-renv is slow, but venv seems quick. So that we can prepare renv at the docker time, but venv at the run time (after launching the vs code. and 
+renv is slow, but uv venv seems quick. So that we can prepare renv at the docker time, but venv at the run time (after launching the vs code. and 
 through vs code environment. 
 
 second thing.It seems that when I tried to use venv, if prepare venv environment on the container, and then mapped as named volume for .venv folder, I will
 be complained for adding (by uv add matplot, eg) packages as "hardlink to file, reduced performance" warning.it is likely because of "different file system"??. 
 
-Anyway, a workable strategy is to install uv (for the first time), and then create virtual environment by uv within vs code environment. 
+Anyway, a workable strategy is to **install uv (for the first time), and then create virtual environment by uv within vs code environment.** 
 Later on, we only need to keep track the pyproject.toml and uv.lock by git and only update (sync) the environment, but don't update the docker for venv point of view.
+
+To re-iterate, we only need to prepare uv but not uv venv on container. But use git to keep track of project yaml and lock.uv together with other project files(?need to try and confirm later).
+As a result, there will be only one set of Dockerfile and docker-compose yaml files. It depends
+on whether we start with a new project or continue with a project.
+
++ In the former case, we need to run uv init >> uv venv >> . .venv/bin/activate >> uv
+  add and then add the new
+  project yaml and uv.lock to the project by git
+
++ In the latter case, we only need to pull the changes with project yaml and uv and
+  then uv sync for restore the virtual environment.
+
+Note again, in either case, we only need to run the same set of docker file and docker compose
+yaml files.
+!!! Dockefile_python and docker-compose_python.yml
 
 
 ### renv 
@@ -182,6 +197,19 @@ since the project and vs-code IDE are separated, we don't have to match the user
 user ids (?). we only need to make sure the two ids in Dockerfile and docker-compose file match.
 
 !!!(need to confirm).
+
+update on this permission issue: it seems if we do everything correctly, we will be able to
+make the file permission working correctly on both container and host.
+Below is the things need to be correct:
+
++ match the user name to be "abc", which is the default by the dockerfile to
+  start with (?).
++ only change the id to match between the container and host.
+
+(need to come back testing on this issue!!
+one thing to test is whether we can change the username at docker build time or running time
+or at the time of running project after docker container launching.
+
 
 ---------------------
 ## To-do later

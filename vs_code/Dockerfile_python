@@ -4,7 +4,11 @@ FROM lscr.io/linuxserver/code-server:latest
 # only prepare uv alone
 #
 
-ARG NB_USER=1000
+#need to set this correctly!!!! please be careful!!!
+ARG NB_USER_ID=1001
+ARG NB_GROUP_ID=1001
+ARG NB_USER_NAME=abc
+
 
 #now prepare the R and renv
 WORKDIR /config/workspace
@@ -19,10 +23,11 @@ python3 python3-pip jupyter-notebook python3-yaml && \
 #pkg-config automake autoconf g++ libxml2-dev && 
 apt-get clean
 
-RUN dpkg -i quarto.deb
+RUN dpkg -i quarto.deb && rm quarto.deb && \
+    quarto install tinytex
 #RUN apt-get install -qy python3-jupyter-server python3-jupyterlab-server
 
-RUN  quarto install tinytex
+#RUN  quarto install tinytex
 
 
 #USER root
@@ -68,7 +73,8 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&&
 #	  uv venv # create the virtual environment
 #	  . .venv/bin/activate # activate the virtual envirotnmen for project
 #         uv add jupyter # to add the jupyter to the environment and also generate the lockfile, vu.lock
-#	  uv deactivate # deactivate the environment.
+#	  uv deactivate # to deactivate the environment
+#
 #######################
 
 ###########################
@@ -79,5 +85,5 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh #&&
 #RUN ls -la .. && pwd && ls -la . && id && ls -la ../.local/bin && 
 #    ../.local/bin/uv --version 
 
-RUN chown -R ${NB_USER} .
+RUN chown -R ${NB_USER_NAME} .
 

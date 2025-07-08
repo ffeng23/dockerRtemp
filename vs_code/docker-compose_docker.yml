@@ -1,14 +1,14 @@
 services:
-  code-server:
+  code-server-docker:
     #image: lscr.io/linuxserver/code-server:latest
     build: 
        context: .
-       dockerfile: Dockerfile
+       dockerfile: Dockerfile_docker
 
 
     privileged: true
 
-    container_name: code-server
+    container_name: code-server-docker
     user: root
     environment:
       - PUID=1001
