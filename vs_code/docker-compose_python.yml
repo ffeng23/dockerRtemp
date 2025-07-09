@@ -24,7 +24,7 @@ services:
       - vscode_vol_uv:/config/.local/bin
       #- vscode_vol_venv:/config/workspace/.venv
     ports:
-      - 8444:8443
+      - 8443:8443
     restart: unless-stopped 
   
 volumes:
