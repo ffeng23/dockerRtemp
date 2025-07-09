@@ -24,19 +24,26 @@ services:
         - -c 
         - |
           id
-          ulimit -n 165536
+          ulimit -n 165536 #set the ulimit, is this necessary?
           service docker restart
           service docker status
-          docker info
+          docker info # ncessary, so to create /var/run/docker.sock
           ls -la /var/run/
           chmod a+r /var/run/docker.sock
           chown abc:docker -R /config/.docker
           chmod -R g+rw /config/.docker
           echo 'Calling the services..........'
+
           usermod -p $(openssl passwd -1 password2) abc
+	  #this is necessary since we need the sudo permission for the user.
+
           #usermod -aG sudo abc
+
           #su abc -s /bin/bash -c "/app/code-server/bin/code-server --bind-addr 0.0.0.0:8443" 
           sudo -u abc /app/code-server/bin/code-server --bind-addr 0.0.0.0:8443 --auth none
+          # no authentication, if we want authentication, we need to specify here (check manual
+          # for how). note: since we do entrypoint and call everything here, the previous
+          #section doesn't work for setting password and change file permission(?)
           #bash
 
     volumes:
