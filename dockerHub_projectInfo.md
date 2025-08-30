@@ -99,3 +99,64 @@ project folder: E14 sensei laptop
   
   hg/SNS101Seq
 
+- 14) ffeng23/vep2
+
+This is the perl project for doing conversion of vcf to maf. It is an image with:
+
+    + two stages build, start clear_linux and install everything to a folder and then
+    copy over to save space
+    
+    + showing conda installation and copy over
+    
+    + copy over conda itself for using in the image
+    
+    + showing install mamba and then use it to accellorate conda installation
+    
+    + doing snakemake
+    
+    + start with some some user and then change its permission (id and gid) for correct 
+    file permission on host.
+    
+    + depends on vep and perl vcf2maf. We install vep using conda on builder and then
+    copy over to the running container. (see below).
+    
+**v1.0**
+
+vcf2maf and vep: vcf2maf is old (don't know the version, but with a tag)
+    and vep is version 102.
+    
+For vcf2maf to work, we need to know the 
+    
+        * genome build, for our personalis to work, we have GRCh37
+        * VEP needs the genome reference as specified genome build
+        * VEP also needs the cache (? what ? need to read more about VEP). 
+        in this case we need to download and put it to somewhere and let vep know by "--vep-data".
+        It seems vep installer should take care of it (as specified by manual), but for us 
+        we do it for docker image to install and copy over, this might not be correctly
+        copy the cache folder!!! Need to take care manually intentionally. We do this
+        by copy over previously prepared folder to ref_data!!! (need to be careful if we do
+        otherwise, say for GRCh38 or latest version).
+        
+Notes: about vcf2maf and vep we have to specify and prepare them in snakemake file. 
+
+The scenario is that we prepare/load everything in the image or separately for the data and 
+input sequences. and then specify the everything in snakemake. 
+
+Another twist is, snakemake file is separated from the image. We need to know 
+    
+    + vep folder in the image.
+    
+    + the reference and input sequences are separated by mapping dirve (lucky!!!).
+    
+To-do: do I need to add the conda yaml of running snakemake to the docker??? (probably not!!!) 8/29/2025
+
+Location of the : 
+
++ docker is in mskcc in hg folder, need to make it to the dockerRtmp git hub to keep track
+
++ snakemake is in the SNS101Seq/Data/mutation folder, the project folder.
+
+This is good to separate them!!!
+
+
+    
