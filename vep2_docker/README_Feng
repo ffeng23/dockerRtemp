@@ -1,0 +1,52 @@
+# README
+NOTE by Feng: this one is the github tracking folder for VEP2 docker
+
+it started from mskcc vcf2maf project. here mainly we kept original/old
+version of perl scripts and also Dockerfile. to make the image with
+all resources, vcf2maf and vep.
+currently it is v1.0 on docker hub. 
+
+the docker-compose.yml is not supposed to work here. need to specify 
+the input and ref (cache vep) in the working folder.
+SNS101Seq/Data/mutation!!!!
+also it is supposed to work with snakemake (not necessarily)
+
+by Feng
+
+## Project
+
+This project is originally from https://github.com/mskcc/vcf2maf
+
+## What I did.
+
+I modified docker and added docker-compose yaml to make it an image that can 
+be used by my own project (SNS101Seq).
+
+## PLEASE DON'T update this folder (??)
+
+# Files:
+
+Dockerfile: has been modified by me on 12/17/2024.
+        In this one, the original making is to make use of clearlinux and 
+        then install the clearlinux again to a folder, which is then copied to
+        the minimal image (SCRATCH) and also install conda and necessary packages under it 
+        which are then copied to the new system to a system folder, /usr/local.
+        this way is to keep the image smaller. 
+        
+        Note that the conda itself is not working, since conda itself is installed to the
+        builder image, and its all installed package do work and copied to the 
+        docker container. Again, conda is installed to /usr/ folder, but not copied to
+        the container. 
+        
+        A very good strategy. need to follow.
+        
+        The caveat is that when we try to install R on clearlinux. the container grows too big,
+        bigger than other system (ubuntu or debian) containers. Need to keep eyes on this.
+        
+        
+        
+Dockerfile.orig: this is the one originally from the repo. 
+
+docker-compose.yaml: I added on 12/17/2024. need to modified the mapping of folder to connect to
+    different real folder for data and reference sequences.
+
