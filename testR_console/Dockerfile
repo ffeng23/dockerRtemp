@@ -1,5 +1,5 @@
 
-FROM rocker/r-ver:4.1.3
+FROM docker.io/rocker/r-ver:4.1.3
 
 #create a folder in container and entering it.
 #something it is not working well at the root directory.
