@@ -1,0 +1,51 @@
+# README
+12/9/2020
+## Aims
+
+This is a project used to build docker image for the tools used for analyzing copy number data.
+It mainly hostes the cnvkit tool and gistic2 program. We might add more later.
+
+## Prerequisites
+
++ cnvkit prerequisite
+
+ reference: 
+
++ gistic2 prerequisite.
+
++ we also need snakemake ability.
+
++ it is also worth mentioning that in here we manage the user identity and folder permission.
+
+## Information about files 
+there is a snakemake file example in 
+
+SNS101Seq/Data/Copynumber
+
+it is named as "Snakefile_runCnvkit2_batch3_08112024_docker_example"
+
+## how to make docker container
+
+need to download "GISTIC_2_0_23.tar.gz" and also "hg19.mat"
+
+
+## how to run?
+
+see the docker compose yaml file. At the end, it shows how to run the docker container.
+
+It works as a bash mode and supposed to be run as a user instead of the root mode.
+
+Need to map to the correct folders in the docker compose yaml :
+1) bind the data volume to contains both reference genome and data input
+2) bind the project folder with the snakemake and write the output.
+
+
+3) docker compose up -d #backgroud mode
+4) docker compose exec scomatic_2 su - user1
+
+5) modify the snakefile to use the cnvkit 
+
+6) run Gistic2 (need to work more on this).
+
+
+
