@@ -48,5 +48,9 @@ Dockerfile: has been modified by me on 12/17/2024.
 Dockerfile.orig: this is the one originally from the repo. 
 
 docker-compose.yaml: I added on 12/17/2024. need to modified the mapping of folder to connect to
-    different real folder for data and reference sequences.
+    different real folder for data and reference sequences. see the real example one in SMS101Seq/Data/mutations/
+
+docker-compose_podman.yaml: added 8/29/2025, to run podman compose. Changes relative to docker-compose.yaml:
+                pointing to docker.io/ffeng23/vep2_podman and remove user 0:0 call and add "userns:''" for mapping
+                to the correct user id on host from container.
 

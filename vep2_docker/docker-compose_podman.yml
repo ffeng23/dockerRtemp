@@ -5,9 +5,9 @@ services:
         #context: .
         #dockerfile: Dockerfile_jupyterlab
 
-    image: vep2
+    image: docker.io/ffeng23/vep2_podman
     
-    user: 0:0
+    #user: 0:0
     #environment:
     #    USER_d: user1
     #    uid1: 1000
@@ -33,7 +33,7 @@ services:
     #ports:
     #   - 8888:8888
     
-    #userns_mode: keep-id
+    userns_mode: ""
 
     entrypoint:
         - /bin/bash 
@@ -43,24 +43,6 @@ services:
           echo '${USER_dock}.........'
           echo '${DIR_TO_CHANGE}..........'
           id
-          if [ ! $(getent group ${GID1}) ]; then
-             echo "adding group id......"
-             groupadd --gid ${GID1} ${USER_dock}_1  #note that we intentionally to append the user with _1 in case 
-                                                   #the user group already exists. be careful here.
-          fi
-          
-          if [ ! $(getent passwd $USER_dock) ]; then
-             useradd --uid ${UID1} --gid ${GID1} user1
-          else
-             echo "modifying user id......."
-             usermod -u ${UID1} -g ${GID1} $USER_dock
-          fi
-          echo 'change the owner ship of necessary files'
-          date > /home/${USER_dock}/Succeed.txt
-          echo 'start the chown job....' >> /home/${USER_dock}/Succeed.txt
-          #please create project under the ruser home directory
-            #otherwise we need to change ownership of that directory too
-          chown -R ${UID1}:${GID1} /home/${USER_dock}
           
           echo 'Calling the services..........'
           echo 'Done with chown' >> /home/${USER_dock}/Succeed.txt

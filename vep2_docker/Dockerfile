@@ -1,4 +1,4 @@
-FROM clearlinux:latest AS builder
+FROM docker.io/library/clearlinux:latest AS builder
 
 # Install a minimal versioned OS into /install_root, and bundled tools if any
 ENV CLEAR_VERSION=43760
@@ -59,7 +59,7 @@ RUN /usr/local/bin/mamba install \
 # Deploy the minimal OS and tools into a clean target layer
 FROM scratch
 
-LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>"
+LABEL maintainer="ffeng23@gmail.com"
 
 COPY --from=builder /install_root /
 COPY --from=builder /usr/local /usr/local
