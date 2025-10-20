@@ -19,7 +19,7 @@ RUN adduser --uid $UID --gid $GID --gecos '' --disabled-password $USER1
 #Start doing conda 
 RUN apt-get update \
     && apt-get install -y build-essential \
-    && apt-get install -y wget sudo libncurses5 libxt6 libxmu6 unzip \
+    && apt-get install -y wget sudo libncurses5 libxt6 libxmu6 unzip tar \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -85,7 +85,12 @@ COPY README* ./
 #install Gistic2 program
 RUN mkdir -p ~/Gistic2
 
-ADD GISTIC_2_0_23.tar.gz /home/${USER1}/Gistic2
+RUN wget --quiet ftp://ftp.broadinstitute.org/pub/GISTIC2.0/GISTIC_2_0_23.tar.gz -O /home/${USER1}/Gistic2/GISTIC_2_0_23.tar.gz
+
+RUN tar -xvzf /home/${USER1}/Gistic2/GISTIC_2_0_23.tar.gz -C /home/${USER1}/Gistic2
+
+RUN mkdir -p ~/ref_seq
+#for reference sequences.
 
 USER root  
 #here we run as root, because otherwise the unzip is not going to work. the trouble

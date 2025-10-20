@@ -33,7 +33,7 @@ services:
     #      #su - ${USER} R
     #      #echo 'DONE'
         
-    userns_mode: nomap
+    userns_mode: ""
     
     #working_dir: /main
     volumes:
