@@ -1,0 +1,78 @@
+##Feng's notes: this is supposed to be identical to Dockfile except we added
+## code to also install jupyterlab by conda for trying!!!
+## please check the latest version of Dockerfile to make it work!!!
+
+---Don't run------
+
+FROM clearlinux:latest AS builder
+
+# Install a minimal versioned OS into /install_root, and bundled tools if any
+ENV CLEAR_VERSION=42770
+RUN swupd os-install --no-progress --no-boot-update --no-scripts \
+    --version ${CLEAR_VERSION} \
+    --path /install_root \
+    --statedir /swupd-state \
+    --bundles os-core-update,which
+
+# Download and install conda into /usr/bin
+ENV MINICONDA_VERSION=py38_23.11.0-2
+RUN swupd bundle-add --no-progress curl && \
+    curl -sL https://repo.anaconda.com/miniconda/Miniconda3-${MINICONDA_VERSION}-Linux-x86_64.sh -o /tmp/miniconda.sh && \
+    sh /tmp/miniconda.sh -bfp /usr
+
+# Use conda to install remaining tools/dependencies into /usr/local
+ENV VEP_VERSION=102.0 \
+    HTSLIB_VERSION=1.10.2 \
+    BCFTOOLS_VERSION=1.10.2 \
+    SAMTOOLS_VERSION=1.10 \
+    LIFTOVER_VERSION=377
+    
+RUN conda create -qy -p /usr/local \
+    -c conda-forge \
+    -c bioconda \
+    -c defaults \
+    ensembl-vep \
+    htslib \
+    bcftools \
+    samtools \
+    ucsc-liftover \
+    snakemake \
+    jupyterlab
+
+# Deploy the minimal OS and tools into a clean target layer
+FROM scratch
+
+LABEL maintainer="Cyriac Kandoth <ckandoth@gmail.com>"
+
+COPY --from=builder /install_root /
+COPY --from=builder /usr/local /usr/local
+COPY data /opt/data
+COPY *.pl /opt/
+WORKDIR /opt
+
+#Adding users
+ARG UID=2000
+ARG GID=2000
+ARG USER1=user1
+
+#create a new user. this is necessary to make the file generated in docker to 
+# have the permission (read/write) to the host
+RUN groupadd --gid $GID $USER1 && useradd --uid $UID --gid $GID $USER1
+
+USER user1
+WORKDIR /home/${USER1}/vep 
+#note this one is the project folder, holding snakemake files
+
+#make three folders, first for project data, second for reference
+
+
+RUN mkdir -p seq_data
+RUN mkdir -p ref_seq
+
+USER root
+
+# to run
+## docker run -it --rm vep2 su - user1
+
+# to compile/build
+## docker build -f Dockerfile . -t vep2
