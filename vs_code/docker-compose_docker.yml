@@ -10,7 +10,10 @@ services:
 
     container_name: code-server-docker
     user: root
-    environment:
+
+    #set up things for running code server, user id, group id,
+    # password, etc. read more about this in README.codeserver.docker
+    environment: 
       - PUID=1001
       - PGID=1001
       - TZ=Etc/UTC

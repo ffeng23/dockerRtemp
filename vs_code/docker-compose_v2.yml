@@ -10,6 +10,12 @@ services:
        dockerfile: Dockerfile_v2
 
     container_name: code-server
+
+    #set up things for running code server,
+    # user id, group id, password, etc.
+    # this means, we don't have to manually change the
+    # user id here or in docker!! read more in README.codeser.docker
+
     environment:
       - PUID=1000
       - PGID=1000

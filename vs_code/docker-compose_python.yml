@@ -6,6 +6,11 @@ services:
        dockerfile: Dockerfile_python
 
     container_name: code-server-python
+
+    #set up things for running code server,
+    # user id, group id, password, etc.
+    # this means, we don't have to manually change the
+    # user id here or in docker!! read more in README.codeser.docker
     environment:
       - PUID=1001
       - PGID=1001
