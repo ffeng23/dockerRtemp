@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -qy --no-install-recommends r-base cmake \
 pandoc gcc \
 make libpng-dev libpng-tools zlib1g-dev \
 python3 python3-pip jupyter-notebook python3-yaml \
-pkg-config automake autoconf g++ libxml2-dev && \
+pkg-config automake autoconf g++ libxml2-dev \
+libgdal-dev libudunits2-dev libssl-dev && \
 apt-get clean
 
 RUN dpkg -i quarto.deb && rm quarto.deb && \

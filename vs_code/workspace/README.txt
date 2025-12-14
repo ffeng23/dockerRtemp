@@ -223,6 +223,17 @@ one thing to test is whether we can change the username at docker build time or 
 or at the time of running project after docker container launching.
 
 
+## for vs code R project
+
+after docker is up, in R terminal, we might need to install the following
+
+
+install.packages(c("renv", "languageserver","rmarkdown"))
+
+install.packages('jsonlite', dependencies=TRUE, repos='http://cran.rstudio.com/')
+
+#above don't know why we can not do system wise R installation!!!
+
 ---------------------
 ## To-do later
 
