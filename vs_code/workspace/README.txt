@@ -24,11 +24,23 @@ It comes in with other 4 extensions,
 
 + pdf-viewer if we want to diplay pdf files (vscode-pdf tomoki1207)
 
-
 Again, these extensions need to be installed in the VS code server interface (, instead 
 if we run vs code, we could do commandline at the docker building time with command like
     code install <extension-name>
 )
+
+vscode-pdf by tomoki1207 doesn't work on vs code web version. install pdf-viewer by mathematica(?)
+
+
+
++ "live preview" by ms-code
+
+For a html, we need to install extension "live preview" (by ms-vscode), then
+to preview, right click the html file in the explorer and select "show preview".
+
+Note: "open in browser" extension doesn't work in web vs-code(???). Always give 
+out the "open browser fail..." error (something like that).
+
 
 ## Quarto 
 
