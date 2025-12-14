@@ -234,6 +234,23 @@ install.packages('jsonlite', dependencies=TRUE, repos='http://cran.rstudio.com/'
 
 #above don't know why we can not do system wise R installation!!!
 
+## for vs code R jupyter notebook.
+
+in order to make it available, we need to install IRkernel
+
+   in R terminal
+
+   install.packages("IRkernel")
+   IRkernel::installspec()
+also need to make sure that system has installed
+     sudo apt-get install jupyter-client
+
+To enable R kernel instead of python kernel, we need to do select juptyer interpreter and then
+
+   > jupyter kernel > R
+
+NOte: the point is that R kernel is hidden inside jupyter kernels. It is very confusing.
+
 ---------------------
 ## To-do later
 
